@@ -15,11 +15,15 @@ import javax.validation.ConstraintViolation;
 import javax.validation.Validator;
 
 import org.apache.commons.beanutils.BeanUtilsBean;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import net.slipp.support.MyValidatorFactory;
 
 @WebServlet("/users/update")
 public class UpdateUserServlet extends HttpServlet {
+	private static final Logger log = LoggerFactory.getLogger(UpdateUserServlet.class);
+	
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		HttpSession session = req.getSession();
@@ -38,7 +42,8 @@ public class UpdateUserServlet extends HttpServlet {
 			throw new ServletException(e1);
 		}
 		
-		System.out.println("User : " + user);
+		log.debug("User : {}", user);
+		
 		
 		if (!user.isSameUser(sessionUserId)) {
 			return;

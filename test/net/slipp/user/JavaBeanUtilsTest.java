@@ -1,15 +1,16 @@
 package net.slipp.user;
 
-import static org.junit.Assert.*;
-
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.commons.beanutils.BeanUtilsBean;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class JavaBeanUtilsTest {
+	private static final Logger log = LoggerFactory.getLogger(JavaBeanUtilsTest.class);
 
 	@Test
 	public void populate() throws IllegalAccessException, InvocationTargetException {
@@ -22,9 +23,9 @@ public class JavaBeanUtilsTest {
 	    
 	    BeanUtilsBean.getInstance().populate(javaBean, params);
 	    
-	    System.out.println(javaBean.getUserName());
-	    System.out.println(javaBean.getPassword());
-	    System.out.println(javaBean.getId());
+	    log.debug(javaBean.getUserName());
+	    log.debug(javaBean.getPassword());
+	    log.debug(javaBean.getId() + "");
 	}
 
 }

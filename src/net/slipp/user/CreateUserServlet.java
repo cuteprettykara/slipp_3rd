@@ -16,11 +16,15 @@ import javax.validation.ConstraintViolation;
 import javax.validation.Validator;
 
 import org.apache.commons.beanutils.BeanUtilsBean;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import net.slipp.support.MyValidatorFactory;
 
 @WebServlet("/users/create")
 public class CreateUserServlet extends HttpServlet  {
+	private static final Logger log = LoggerFactory.getLogger(CreateUserServlet.class);
+
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		User user = new User();
@@ -40,7 +44,7 @@ public class CreateUserServlet extends HttpServlet  {
 			return;
 		}
 		
-		System.out.println("User : " + user);
+		log.debug("User : {}", user);
 
 		UserDAO userDao = new UserDAO();
 		try {
