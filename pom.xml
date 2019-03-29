@@ -86,6 +86,7 @@
 	</dependencies>
 
 	<build>
+		<finalName>qna</finalName>
 		<sourceDirectory>src</sourceDirectory>
 		<testSourceDirectory>test</testSourceDirectory>
 		<outputDirectory>webapp\WEB-INF\classes</outputDirectory>
