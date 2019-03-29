@@ -10,7 +10,7 @@
 
 	<header class="jumbotron subhead" id="overview">
 	<div class="container">
-		<h1>SLiPPy</h1>
+		<h1>SLiPPz</h1>
 		<p class="lead">Sustaninable Life, Programming, Programmer</p>
 	</div>
 	</header>     
