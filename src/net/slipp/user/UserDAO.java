@@ -74,9 +74,9 @@ public class UserDAO {
 			}
 		};
 		
-		RowMapper rm = new RowMapper() {
+		RowMapper<User> rm = new RowMapper<User>() {
 			@Override
-			public Object mapRow(ResultSet rs) throws SQLException {
+			public User mapRow(ResultSet rs) throws SQLException {
 				User user = new User(
 						rs.getString("userId"),
 						rs.getString("password"),
@@ -85,10 +85,9 @@ public class UserDAO {
 						);
 				return user;
 			}
-			
 		};
 		
 		String sql = "select * from USERS where userId = ?"; 
-		return (User) jdbcTemplate.executeQuery(sql, pss, rm);
+		return jdbcTemplate.executeQuery(sql, pss, rm);
 	}
 }

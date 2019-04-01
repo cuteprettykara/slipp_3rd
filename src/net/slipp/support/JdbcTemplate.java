@@ -25,12 +25,12 @@ public class JdbcTemplate {
 		}
 	}
 	
-	public Object executeQuery(String sql, PreparedStatementSetter pss, RowMapper rm) throws SQLException {
+	public <T> T executeQuery(String sql, PreparedStatementSetter pss, RowMapper<T> rm) throws SQLException {
 		Connection conn = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
 		
-		Object obj = null;
+		T t = null;
 		
 		try {
 			conn = ConnectionManager.getConnection();
@@ -44,7 +44,7 @@ public class JdbcTemplate {
 				return null;
 			}
 
-			obj = rm.mapRow(rs);
+			t = rm.mapRow(rs);
 			
 		} catch (Exception e) {
 			
@@ -54,7 +54,7 @@ public class JdbcTemplate {
 			if (conn != null) conn.close();
 		}
 		
-		return obj;
+		return t;
 	}
 
 }
