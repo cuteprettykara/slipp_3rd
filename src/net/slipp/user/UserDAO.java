@@ -3,12 +3,17 @@ package net.slipp.user;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import net.slipp.support.JdbcTemplate;
 import net.slipp.support.PreparedStatementSetter;
 import net.slipp.support.RowMapper;
 
 public class UserDAO {
+	private static final Logger log = LoggerFactory.getLogger(UserDAO.class);
 
 	public void addUser(User user) throws SQLException {
 		JdbcTemplate jdbcTemplate = new JdbcTemplate();
@@ -51,5 +56,25 @@ public class UserDAO {
 		
 		String sql = "select * from USERS where userId = ?"; 
 		return jdbcTemplate.executeQuery(sql, rm, userId);
+	}
+
+	public List<User> findUsers() throws SQLException {
+		JdbcTemplate jdbcTemplate = new JdbcTemplate();
+		
+		RowMapper<User> rm = new RowMapper<User>() {
+			@Override
+			public User mapRow(ResultSet rs) throws SQLException {
+				User user = new User(
+						rs.getString("userId"),
+						rs.getString("password"),
+						rs.getString("name"),
+						rs.getString("email")
+						);
+				return user;
+			}
+		};
+		
+		String sql = "select * from USERS"; 
+		return jdbcTemplate.executeQueries(sql, rm);
 	}
 }

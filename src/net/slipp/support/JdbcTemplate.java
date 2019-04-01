@@ -4,8 +4,15 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class JdbcTemplate {
+	private static final Logger log = LoggerFactory.getLogger(JdbcTemplate.class);
+
 	public void executeUpdate(String sql, PreparedStatementSetter pss) throws SQLException {
 		Connection conn = null;
 		PreparedStatement pstmt = null;
@@ -29,12 +36,22 @@ public class JdbcTemplate {
 		executeUpdate(sql, createPreparedStatementSetter(parameters));
 	}
 	
-	public <T> T executeQuery(String sql, RowMapper<T> rm,  PreparedStatementSetter pss) throws SQLException {
+	public <T> T executeQuery(String sql, RowMapper<T> rm, Object... parameters) throws SQLException {
+		List<T> list = executeQueries(sql, rm, createPreparedStatementSetter(parameters));
+		
+		if (list.isEmpty()) {
+			return null;
+		}
+		
+		return list.get(0);
+	}
+	
+	
+	public <T> List<T> executeQueries(String sql, RowMapper<T> rm, PreparedStatementSetter pss) throws SQLException {
 		Connection conn = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
-		
-		T t = null;
+		List<T> list = new ArrayList<T>();
 		
 		try {
 			conn = ConnectionManager.getConnection();
@@ -44,11 +61,10 @@ public class JdbcTemplate {
 			
 			rs = pstmt.executeQuery();
 			
-			if (!rs.next()) {
-				return null;
+			while(rs.next()) {
+				T t = rm.mapRow(rs);
+				list.add(t);				
 			}
-
-			t = rm.mapRow(rs);
 			
 		} catch (Exception e) {
 			
@@ -58,13 +74,13 @@ public class JdbcTemplate {
 			if (conn != null) conn.close();
 		}
 		
-		return t;
+		return list;
 	}
 	
-	public <T> T executeQuery(String sql, RowMapper<T> rm, Object... parameters) throws SQLException {
-		return executeQuery(sql, rm, createPreparedStatementSetter(parameters));
+	public <T> List<T> executeQueries(String sql, RowMapper<T> rm, Object... parameters) throws SQLException {
+		return executeQueries(sql, rm, createPreparedStatementSetter(parameters));
 	}
-
+	
 	private PreparedStatementSetter createPreparedStatementSetter(Object... parameters) {
 		return new PreparedStatementSetter() {
 			@Override
