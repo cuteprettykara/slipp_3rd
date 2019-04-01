@@ -23,23 +23,19 @@ public class ApiFindUserServlet extends HttpServlet {
 		}
 		
 		UserDAO userDao = new UserDAO();
-		try {
-			User user = userDao.findById(userId);
-			
-			if (user == null) {
-				return;
-			}
-			
-			Gson gson = new Gson();
-			String jsonData = gson.toJson(user);
-			
-			resp.setContentType("application/json;charset=utf-8");
-			
-			PrintWriter out = resp.getWriter();
-			out.println(jsonData);
-			
-		} catch (SQLException e) {
+		User user = userDao.findById(userId);
+		
+		if (user == null) {
+			return;
 		}
+		
+		Gson gson = new Gson();
+		String jsonData = gson.toJson(user);
+		
+		resp.setContentType("application/json;charset=utf-8");
+		
+		PrintWriter out = resp.getWriter();
+		out.println(jsonData);
 		
 		
 	}

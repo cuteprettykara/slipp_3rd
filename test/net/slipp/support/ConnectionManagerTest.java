@@ -6,6 +6,8 @@ import java.sql.Connection;
 
 import org.junit.Test;
 
+import net.slipp.support.jdbc.ConnectionManager;
+
 public class ConnectionManagerTest {
 
 	@Test
